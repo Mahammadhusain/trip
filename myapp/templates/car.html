@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+
+{% block tilte %}
+Car|
+{% endblock tilte %}
+
+
+{% block body %}
+<div class="container">
+    <div class="col-12 border">
+        <div class="p-3 display-4 text-center">Cars</div>
+    </div>
+    <!-- Search bar -->
+    <div class="row">
+        <div class="col-12 border mx-auto p-3" style="margin-top: 5rem;">
+            <form method="GET">
+                <div class="row">
+                    <div class="col" style="margin-top: 1.9rem;">
+                        <div class="form-group ">
+                            <label for="inputState">From</label>
+                            
+                            {% render_field myFilter.form.from_location class='form-control-lg' placeholder='🔍 Enter From Location' %}
+                              
+                        </div>
+                    </div>
+                    <div class="col" style="margin-top: 1.9rem;">
+                        <div class="form-group ">
+                            <label for="inputState">To</label>
+                            {% render_field myFilter.form.to_location class='form-control-lg' placeholder='🔍 Enter To Location' %}
+                        </div>
+                    </div>
+                    
+
+
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 1.9rem; " type="submit"><i class="fas fa-search"></i> Search</button>
+                        <a href="{% url 'car' %}" class="btn btn-warning btn-lg ml-3" style="margin-top: 1.9rem; " type="submit"><i class="fas fa-list-ul"></i> Show All</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+
+
+    
+    <!-- Search table -->
+    <div class="row ">
+        <div class="col-12 mx-auto p-3" style="margin-top: 5rem;">
+            <div class=" row bg-secondary mt-5 text-white p-3 h6">Search Details</div>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">Provider</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  {% for i in carset %}
+                  <tr>
+                    <td scope="row">{{i.from_location}}</td>
+                    <td scope="row">{{i.to_location}}</td>
+                    <td scope="row">{{i.provider}}</td>
+                    <td scope="row">{{i.duration}}</td>
+                    <td scope="row">{{i.v_type}}</td>
+                    <td scope="row">{{i.price}}</td>
+                    <td scope="row">
+                        <a class="btn btn-outline-success" href="{% url 'booking' i.id %}"><i class="fas fa-pen"></i> Book Now</a>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <div class="alert alert-danger" role="alert">
+                    <div class="text-center"><strong>-------------- No Any Cars Available --------------</strong></div>
+                  </div>
+                  {% endfor %}
+                      
+                </tbody>
+              </table>
+
+
+            <!-- Pagination Number Block  -->
+            <div class="container mt-5">
+                <div class="row float-right ">
+                    <span class="m-0 p-0">
+
+                        {% if carset.has_previous %}
+                        <a class="btn btn-outline-info" href="?page={{carset.previous_page_number}}&ok=#ok">Previous</a>
+                        {% endif %}
+
+
+                        <span>{% for pg in carset.paginator.page_range %}
+                            {% if carset.number == pg %}
+                            <a href="?page={{pg}}" class="btn btn-sm btn-primary">
+                                <span class="badge">{{pg}}</span>
+                            </a>
+                            {% else %}
+                            <a href="?page={{pg}}" class="btn btn-sm btn-secondary">
+                                <span class="badge">{{pg}}</span>
+                            </a>
+                            {% endif %}
+                            {% endfor %}</span>
+
+                        {% if carset.has_next %}
+                        <a class="btn btn-outline-info" href="?page={{carset.next_page_number}}&ok=#ok">Next</a>
+                        {% endif %}
+                    </span>
+                </div>
+
+            </div>
+
+
+
+        </div>
+        
+    </div>
+</div>
+{% endblock body %}

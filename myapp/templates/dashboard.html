@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+
+{% block tilte %}
+Dashboard|
+{% endblock tilte %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row border">
+        <div class="col-12">
+            <div class="p-3 display-4 text-center">Dashboard</div>
+        </div>
+        <div class="col-12">
+            <div>
+                {% if messages %}
+
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <strong>{{message}}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+    <div class="row border p-5 ">
+        <div class="col mt-3">
+            <div class="card" style="width: 18rem; background-color: #669999; ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-light">Today Booked</h5>
+                    <h1 class="card-title text-center text-light">{{today_booked}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col mt-3">
+            <div class="card" style="width: 18rem; background-color: #669999; ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-light">Cars Booked</h5>
+                    <h1 class="card-title text-center text-light">{{car_booked}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col mt-3">
+            <div class="card" style="width: 18rem; background-color: #669999; ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-light">Buses Booked</h5>
+                    <h1 class="card-title text-center text-light">{{buses_booked}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col mt-3">
+            <div class="card" style="width: 18rem; background-color: #669999; ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-light">Trains Booked</h5>
+                    <h1 class="card-title text-center text-light">{{trains_booked}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col  mt-3">
+            <div class="card" style="width: 18rem; background-color: #669999; ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-light">Flights Booked</h5>
+                    <h1 class="card-title text-center text-light">{{flights_booked}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col  mt-3">
+            <div class="card" style="width: 18rem; background-color: #669999; ">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-light">Total Booked</h5>
+                    <h1 class="card-title text-center text-light">{{total_booked}}</h1>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<!-- Collapse -->
+
+
+
+
+
+
+
+
+
+<div class="container">
+    <div class="row ">
+        <div class="col border p-5">
+            <div class="p-2 text-center text-white mt-2 " style="background-color: #737373;">
+                <h3>Your Past Booking Details</h3>
+            </div>
+            <table class="table table-hover" id="ok">
+                <thead>
+                    <tr>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Provider</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Booked Date</th>
+                        <th scope="col">Ticket</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for i in show_data %}
+                    <tr>
+                        <td scope="row">{{i.from_location}}</td>
+                        <td scope="row">{{i.to_location}}</td>
+                        <td scope="row">{{i.provider}}</td>
+                        <td scope="row">{{i.duration}}</td>
+                        <td scope="row">{{i.v_type}}</td>
+                        <td scope="row">{{i.total}}</td>
+                        <td scope="row">{{i.book_date}}</td>
+                        <td scope="row"><a class="btn btn-warning" href="{% url 'slip' i.id %}">Print Slip</a></td>
+                    </tr>
+                    {% empty %}
+                    <div class="alert alert-danger" role="alert">
+                        <div class="text-center"><strong>-------------- No Any Buses Available --------------</strong>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+            <!-- Pagination Number Block  -->
+            <div class="container mt-5">
+                <div class="row float-right">
+                    <span class="m-0 p-0 a">
+
+                        {% if show_data.has_previous %}
+                        <a class="btn btn-outline-info"
+                            href="?page={{show_data.previous_page_number}}&ok=#ok">Previous</a>
+                        {% endif %}
+
+
+                        <span>{% for pg in show_data.paginator.page_range %}
+                            {% if show_data.number == pg %}
+                            <a href="?page={{pg}}&ok=#ok" class="btn btn-sm btn-primary">
+                                <span class="badge">{{pg}}</span>
+                            </a>
+                            {% else %}
+                            <a href="?page={{pg}}&ok=#ok" class="btn btn-sm btn-secondary">
+                                <span class="badge">{{pg}}</span>
+                            </a>
+                            {% endif %}
+                            {% endfor %}</span>
+
+                        {% if show_data.has_next %}
+                        <a class="btn btn-outline-info" href="?page={{show_data.next_page_number}}&ok=#ok">Next</a>
+                        {% endif %}
+                    </span>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock body %}
